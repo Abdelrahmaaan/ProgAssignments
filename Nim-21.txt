@@ -1,0 +1,80 @@
+class Player(object):
+    player_id = 0 # player identifier
+    player_idd = 1
+    last_turn = -1 # ID of player who took last turn
+
+    def __init__(self, ai):
+        self.ai = ai
+
+        self.player_id = Player.player_id
+        Player.player_id = Player.player_id + 1
+        
+        self.player_idd = Player.player_idd
+        Player.player_idd = Player.player_idd + 1
+        
+        
+
+    def NextPlayer():
+        if Player.last_turn + 1 < Player.player_id:
+            return Player.last_turn + 1
+        else:
+            return 0
+
+    def InputError():
+        input('Invalid input: press enter to continue..')
+        return
+
+    def TakeTurn(self, tokens_remaining):
+
+        if self.ai == 0:
+            print('\n\n')
+            print('Tokens Remaining: ' + str(tokens_remaining) )
+            print('Player ' + str(self.player_id) + ', what is your move?' )
+            print('Player ' + str(self.player_idd) + ', what is your move?' )
+
+            try:
+                user_input = int(input(''))
+            except:
+                Player.InputError()
+                return None
+
+            if user_input in range(1, max_tokens_per_turn + 1) and user_input in range(1, tokens_remaining + 1):
+                Player.last_turn = self.player_id # if turn was taken successfully, set self as last player to take turn
+                Player.last_turn = self.player_idd
+                return user_input
+            else:
+                Player.InputError()
+                return None
+
+        else:
+            Player.last_turn = self.player_id
+            Player.last_turn = self.player_idd
+            if tokens_remaining > max_tokens_per_turn:
+                return randint(1,max_tokens_per_turn)
+            elif tokens_remaining > 1:
+                return tokens_remaining - 1
+            else:
+                return 1
+
+
+from random import randint
+
+tokens_remaining = 21 # initialize starting token quantity
+last_token_loses = 1 # set to 1 if player to take last token loses game, 0 if last token wins game
+max_tokens_per_turn = 3 # this is the max number of tokens permitted to take per turn1
+
+
+# p = [Player(0) for i in range(2)] # creates two human players
+p = [Player(i) for i in range(2)] # creates one human player and one AI player
+
+
+while tokens_remaining > 0:
+        tokens_taken = p[Player.NextPlayer()].TakeTurn(tokens_remaining)
+        if tokens_taken is not None:
+            tokens_remaining = tokens_remaining - tokens_taken
+
+print('\n\n')
+if last_token_loses == 1:
+    print('Player ' + str(Player.last_turn) + ' loses!')
+else:
+    print('Player ' + str(Player.last_turn) + ' wins!')
